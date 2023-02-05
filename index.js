@@ -1,0 +1,55 @@
+require('dotenv').config();
+const { Client, GatewayIntentBits, Partials, ChannelType } = require('discord.js');
+const client = new Client({
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.DirectMessages,
+        GatewayIntentBits.MessageContent
+    ], partials: [
+        Partials.User,
+        Partials.Channel,
+        Partials.GuildMember,
+        Partials.Message,
+        Partials.Reaction
+    ]
+}); // Discord Object
+
+client.on("ready", () => {
+    console.log(`Logged in as ${client.user.tag}!`);
+});
+
+client.on("messageCreate", async message => {
+    if (message.webhookId || message.bot) return; // Skip messages by bots and webhooks
+    let allowedChannelIds = process.env['ALLOWED_CHANNEL_IDS'].split(',');
+    if (allowedChannelIds.includes(message.channel.id)) {
+        let webhooks = await message.channel.fetchWebhooks().catch(console.error);
+        let foundWebhook = null;
+        for (let webhook of webhooks) {
+            if (webhook.owner.id == client.user.id) {
+                foundWebhook = webhook;
+            }
+        }
+        if (!foundWebhook) {
+            foundWebhook = await message.channel.createWebhook({
+                name: 'Repost-Webhook',
+                avatar: client.user.displayAvatarURL({ dynamic: true }),
+                reason: 'Webhook to delete and repost things'
+            }).catch(console.error);
+        }
+        await foundWebhook.send({
+            username: message.member.displayName,
+            avatarURL: message.member.displayAvatarURL({ dynamic: true }),
+            content: message.content,
+            files: message.attachments,
+            embeds: message.embeds
+        }).catch(console.error);
+        await message.delete().catch(console.error);
+    }
+});
+
+if (!process.env['TOKEN']) {
+    console.log("TOKEN not found! You must setup the Discord TOKEN as per the README file before running this bot.");
+} else {
+    client.login(process.env['TOKEN']);
+}

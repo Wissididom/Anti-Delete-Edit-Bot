@@ -1,0 +1,14 @@
+[Unit]
+Description=Anti-Delete-Edit-Bot
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+WorkingDirectory=/root/Anti-Delete-Edit-Bot
+ExecStart=node index.js
+
+[Install]
+WantedBy=multi-user.target
