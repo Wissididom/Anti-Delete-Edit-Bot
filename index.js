@@ -26,7 +26,7 @@ client.on("ready", () => {
 });
 
 client.on("messageCreate", async (message) => {
-  if (message.webhookId || message.bot) return; // Skip messages by bots and webhooks
+  if (message.webhookId || message.author.bot) return; // Skip messages by bots and webhooks
   let allowedChannelIds = process.env["ALLOWED_CHANNEL_IDS"].split(",");
   let allowedRoleIds = process.env["ALLOWED_ROLE_IDS"].split(",");
   for (let role of message.member.roles.cache) {
