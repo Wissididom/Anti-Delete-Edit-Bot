@@ -58,6 +58,9 @@ client.on("messageCreate", async (message) => {
         content: message.content,
         files: message.attachments,
         embeds: message.embeds,
+        allowedMentions: {
+          parse: [],
+        },
       })
       .catch(console.error);
     await message.delete().catch(console.error);
