@@ -59,7 +59,7 @@ client.on("messageCreate", async (message) => {
         files: message.attachments,
         embeds: message.embeds,
         allowedMentions: {
-          parse: []
+          parse: [],
         },
       })
       .catch(console.error);
