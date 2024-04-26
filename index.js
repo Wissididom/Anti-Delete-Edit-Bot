@@ -1,10 +1,12 @@
-require("dotenv").config();
-const {
+import "dotenv/config";
+import {
   Client,
+  Events,
   GatewayIntentBits,
   Partials,
   ChannelType,
-} = require("discord.js");
+} from "discord.js";
+
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -21,11 +23,11 @@ const client = new Client({
   ],
 }); // Discord Object
 
-client.on("ready", () => {
+client.on(Events.ClientReady, () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
-client.on("messageCreate", async (message) => {
+client.on(Events.MessageCreate, async (message) => {
   if (message.webhookId || message.author.bot) return; // Skip messages by bots and webhooks
   let allowedChannelIds = process.env["ALLOWED_CHANNEL_IDS"].split(",");
   let allowedRoleIds = process.env["ALLOWED_ROLE_IDS"].split(",");
