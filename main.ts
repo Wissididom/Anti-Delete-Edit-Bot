@@ -21,7 +21,7 @@ client.on(Events.ClientReady, () => {
 
 client.on(Events.MessageCreate, async (message) => {
   if (message.webhookId || message.author.bot) return; // Skip messages by bots and webhooks
-  if (message.channel.isDMBased()) return;
+  if (message.channel.isDMBased() || message.channel.isThread()) return;
   const allowedChannelIds = Deno.env.get("ALLOWED_CHANNEL_IDS")?.split(",") ??
     [];
   const allowedRoleIds = Deno.env.get("ALLOWED_ROLE_IDS")?.split(",") ?? [];
