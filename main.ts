@@ -4,7 +4,6 @@ const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.DirectMessages,
     GatewayIntentBits.MessageContent,
   ],
   partials: [
@@ -17,7 +16,7 @@ const client = new Client({
 }); // Discord Object
 
 client.on(Events.ClientReady, () => {
-  console.log(`Logged in as ${client.user.tag}!`);
+  console.log(`Logged in as ${client.user?.tag}!`);
 });
 
 client.on(Events.MessageCreate, async (message) => {
@@ -25,7 +24,7 @@ client.on(Events.MessageCreate, async (message) => {
   const allowedChannelIds = Deno.env.get("ALLOWED_CHANNEL_IDS")?.split(",") ??
     [];
   const allowedRoleIds = Deno.env.get("ALLOWED_ROLE_IDS")?.split(",") ?? [];
-  for (const role of message.member.roles.cache) {
+  for (const role of message.member?.roles.cache) {
     if (allowedRoleIds.includes(role[1].id)) {
       return;
     }
@@ -34,7 +33,7 @@ client.on(Events.MessageCreate, async (message) => {
     const webhooks = await message.channel.fetchWebhooks().catch(console.error);
     let foundWebhook = null;
     for (const webhook of webhooks) {
-      if (webhook[1].owner.id == client.user.id) {
+      if (webhook[1].owner.id == client.user?.id) {
         foundWebhook = webhook[1];
       }
     }
@@ -42,15 +41,15 @@ client.on(Events.MessageCreate, async (message) => {
       foundWebhook = await message.channel
         .createWebhook({
           name: "Repost-Webhook",
-          avatar: client.user.displayAvatarURL({ dynamic: true }),
+          avatar: client.user?.displayAvatarURL(),
           reason: "Webhook to delete and repost things",
         })
         .catch(console.error);
     }
     await foundWebhook
       .send({
-        username: message.member.displayName,
-        avatarURL: message.member.displayAvatarURL({ dynamic: true }),
+        username: message.member?.displayName,
+        avatarURL: message.member?.displayAvatarURL(),
         content: message.content,
         files: message.attachments,
         embeds: message.embeds,
