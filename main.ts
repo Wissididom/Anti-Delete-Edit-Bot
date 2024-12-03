@@ -1,11 +1,4 @@
-import "dotenv/config";
-import {
-  Client,
-  Events,
-  GatewayIntentBits,
-  Partials,
-  ChannelType,
-} from "discord.js";
+import { Client, Events, GatewayIntentBits, Partials } from "discord.js";
 
 const client = new Client({
   intents: [
@@ -29,17 +22,18 @@ client.on(Events.ClientReady, () => {
 
 client.on(Events.MessageCreate, async (message) => {
   if (message.webhookId || message.author.bot) return; // Skip messages by bots and webhooks
-  let allowedChannelIds = process.env["ALLOWED_CHANNEL_IDS"].split(",");
-  let allowedRoleIds = process.env["ALLOWED_ROLE_IDS"].split(",");
-  for (let role of message.member.roles.cache) {
+  const allowedChannelIds = Deno.env.get("ALLOWED_CHANNEL_IDS")?.split(",") ??
+    [];
+  const allowedRoleIds = Deno.env.get("ALLOWED_ROLE_IDS")?.split(",") ?? [];
+  for (const role of message.member.roles.cache) {
     if (allowedRoleIds.includes(role[1].id)) {
       return;
     }
   }
   if (allowedChannelIds.includes(message.channel.id)) {
-    let webhooks = await message.channel.fetchWebhooks().catch(console.error);
+    const webhooks = await message.channel.fetchWebhooks().catch(console.error);
     let foundWebhook = null;
-    for (let webhook of webhooks) {
+    for (const webhook of webhooks) {
       if (webhook[1].owner.id == client.user.id) {
         foundWebhook = webhook[1];
       }
@@ -69,10 +63,12 @@ client.on(Events.MessageCreate, async (message) => {
   }
 });
 
-if (!process.env["TOKEN"]) {
+const token = Deno.env.get("TOKEN");
+
+if (!token) {
   console.log(
     "TOKEN not found! You must setup the Discord TOKEN as per the README file before running this bot.",
   );
 } else {
-  client.login(process.env["TOKEN"]);
+  client.login(token);
 }
