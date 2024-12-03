@@ -55,7 +55,7 @@ client.on(Events.MessageCreate, async (message) => {
           username: message.member?.displayName,
           avatarURL: message.member?.displayAvatarURL(),
           content: message.content,
-          files: message.attachments,
+          files: [...message.attachments.values()],
           embeds: message.embeds,
           allowedMentions: {
             parse: [],
