@@ -33,9 +33,11 @@ client.on(Events.MessageCreate, async (message) => {
   if (allowedChannelIds.includes(message.channel.id)) {
     const webhooks = await message.channel.fetchWebhooks().catch(console.error);
     let foundWebhook = null;
-    for (const webhook of webhooks) {
-      if (webhook[1].owner.id == client.user?.id) {
-        foundWebhook = webhook[1];
+    if (webhooks) {
+      for (const [id, webhook] of webhooks) {
+        if (webhook.owner.id == client.user?.id) {
+          foundWebhook = webhook;
+        }
       }
     }
     if (!foundWebhook) {
