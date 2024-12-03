@@ -34,8 +34,8 @@ client.on(Events.MessageCreate, async (message) => {
     const webhooks = await message.channel.fetchWebhooks().catch(console.error);
     let foundWebhook = null;
     if (webhooks) {
-      for (const [id, webhook] of webhooks) {
-        if (webhook.owner.id == client.user?.id) {
+      for (const [, webhook] of webhooks) {
+        if (webhook.owner?.id == client.user?.id) {
           foundWebhook = webhook;
         }
       }
@@ -49,18 +49,20 @@ client.on(Events.MessageCreate, async (message) => {
         })
         .catch(console.error);
     }
-    await foundWebhook
-      .send({
-        username: message.member?.displayName,
-        avatarURL: message.member?.displayAvatarURL(),
-        content: message.content,
-        files: message.attachments,
-        embeds: message.embeds,
-        allowedMentions: {
-          parse: [],
-        },
-      })
-      .catch(console.error);
+    if (foundWebhook) {
+      await foundWebhook
+        .send({
+          username: message.member?.displayName,
+          avatarURL: message.member?.displayAvatarURL(),
+          content: message.content,
+          files: message.attachments,
+          embeds: message.embeds,
+          allowedMentions: {
+            parse: [],
+          },
+        })
+        .catch(console.error);
+    }
     await message.delete().catch(console.error);
   }
 });
