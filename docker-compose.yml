@@ -1,5 +1,5 @@
 services:
-  spotify-discord-show-episodes-webhook:
+  anti-delete-edit-bot:
     image: "ghcr.io/wissididom/anti-delete-edit-bot"
     restart: unless-stopped
     environment:
