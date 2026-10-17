@@ -50,7 +50,7 @@ jobs:
         name: Checkout Code
 
       # Windows
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         name: Download Windows
         with:
           name: Anti-Delete-Edit-Bot-windows-latest
@@ -59,7 +59,7 @@ jobs:
       - name: Rename Windows Binary
         run: mv release-artifacts/Anti-Delete-Edit-Bot.exe release-artifacts/Anti-Delete-Edit-Bot-Windows.exe
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         name: Download Linux
         with:
           name: Anti-Delete-Edit-Bot-ubuntu-latest
@@ -68,7 +68,7 @@ jobs:
       - name: Rename Linux Binary
         run: mv release-artifacts/Anti-Delete-Edit-Bot release-artifacts/Anti-Delete-Edit-Bot-Linux
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         name: Download Mac
         with:
           name: Anti-Delete-Edit-Bot-macos-latest
