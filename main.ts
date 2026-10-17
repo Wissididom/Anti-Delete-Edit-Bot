@@ -22,9 +22,9 @@ client.on(Events.ClientReady, () => {
 client.on(Events.MessageCreate, async (message) => {
   if (message.webhookId || message.author.bot) return; // Skip messages by bots and webhooks
   if (message.channel.isDMBased() || message.channel.isThread()) return;
-  const allowedChannelIds = Deno.env.get("ALLOWED_CHANNEL_IDS")?.split(",") ??
+  const allowedChannelIds = process.env.ALLOWED_CHANNEL_IDS?.split(",") ??
     [];
-  const allowedRoleIds = Deno.env.get("ALLOWED_ROLE_IDS")?.split(",") ?? [];
+  const allowedRoleIds = process.env.ALLOWED_ROLE_IDS?.split(",") ?? [];
   for (const role of message.member?.roles.cache ?? []) {
     if (allowedRoleIds.includes(role[1].id)) {
       return;
@@ -67,7 +67,7 @@ client.on(Events.MessageCreate, async (message) => {
   }
 });
 
-const token = Deno.env.get("TOKEN");
+const token = process.env.TOKEN;
 
 if (!token) {
   console.log(

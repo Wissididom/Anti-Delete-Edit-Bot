@@ -1,0 +1,22 @@
+{
+  "name": "anti-delete-edit-bot",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/Wissididom/Anti-Delete-Edit-Bot#readme",
+  "bugs": {
+    "url": "https://github.com/Wissididom/Anti-Delete-Edit-Bot/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Wissididom/Anti-Delete-Edit-Bot.git"
+  },
+  "type": "module",
+  "main": "main.ts",
+  "scripts": {
+    "start": "node main.ts"
+  },
+  "dependencies": {
+    "discord.js": "^14.27.0",
+    "dotenv": "^18.0.8"
+  }
+}
